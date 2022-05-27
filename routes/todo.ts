@@ -1,9 +1,11 @@
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+import Express, {Request, Response, NextFunction} from 'express';
+// import express from 'express';
+const router = Express.Router();
 const bodyParser = require('body-parser');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
-const todoController = require('../controllers/todoController.js')
+const todoController = require('../controllers/todoController.ts')
 
 router.post('/', urlencodedParser,todoController.addTask);
 

@@ -1,37 +1,36 @@
-const tasksModel = require('../models/task.js');
+import  express, {Request, Response, NextFunction} from 'express';
+import Task from '../models/task';
+// const tasksModel = require('../models/task.js');
 
-exports.addTask = function(req, res){
-    const newTask = new tasksModel({
+exports.getTaskList = function(req: Request, res: Response){
+    Task.find()
+    .then(data=>{
+        res.json(data);
+    })
+    .catch(err=>{
+        console.log(err);
+        res.send("xay ra loi o server");
+    })
+}
+exports.addTask = function(req: Request, res: Response){
+    const newTask = new Task({
         title: req.body.title,
         description: req.body.description,
         status: req.body.status
     });
-    console.log(newTask);
     newTask.save()
-    .then(data => {
+    .then(data=> {
         console.log(data);
         res.json(data);
     })
-    .catch(err =>{
+    .catch(err=>{
         res.send("xay ra loi o server");
     });
 }
-
-exports.getTaskList = function(req, res){
-    tasksModel.find()
-    .then(data=>{
-        res.json(data);
-    })
-    .catch(err=>{
-        console.log(err);
-        res.send("xay ra loi o server");
-    })
-}
-
-exports.getTask = function(req, res){
+exports.getTask = function(req: Request, res: Response){
     let id = req.params.taskId;
     console.log(id);
-    tasksModel.findById(id)
+    Task.findById(id)
     .then(data=>{
         res.send(data);
     })
@@ -41,10 +40,10 @@ exports.getTask = function(req, res){
     })
 }
 
-exports.deleteTask = function(req, res){
+exports.deleteTask = function(req: Request, res: Response){
     let id = req.params.taskId;
     console.log(id);
-    tasksModel.deleteOne({_id: req.params.taskId})
+    Task.deleteOne({_id: req.params.taskId})
     .then(data=>{
         res.send(data);
     })
@@ -54,9 +53,9 @@ exports.deleteTask = function(req, res){
     })
 }
 
-exports.updateTask = function(req, res){
+exports.updateTask = function(req: Request, res: Response){
     let id = req.params.taskId;
-    tasksModel.updateOne({_id: req.params.taskId},
+    Task.updateOne({_id: req.params.taskId},
                             {
                                 $set:{
                                     title: req.body.title,
